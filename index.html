@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <p id='w' style="font-size: 2rem;"></p>
+        <img id='i'>
+        <script>
+            let word;
+            let page
+            getWordGif = async () => {
+                let responce = await fetch(`https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5`);
+                let wordObj = await responce.json();
+                let word = await wordObj.word;
+                let message = await wordObj.message;
+                if (message) {
+                    word = "wait you are refreshing very fast"
+                }
+                page = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ar&dt=t&q=${word}`);
+                console.log(page);
+                page = await page.text();
+                let result = await JSON.parse(page);
+                let translatedText = result[0][0][0];
+                document.getElementById('w').innerText = word + " : " + translatedText;
+                let responce2 = await fetch(`http://api.giphy.com/v1/gifs/search?api_key=A1jbdqyBGeACC8oLAN2ppQz2cKU2BgRJ&q=${word}&limit=1`);
+                let gifObj = await responce2.json();
+                if (gifObj.data[0]) {
+                    let gif = gifObj.data[0].id;
+                    document.getElementById('i').src = `https://media.giphy.com/media/${gif}/giphy.gif`;
+                }
+                else {
+                    getWordGif();
+                }
+            }
+            getWordGif();
+        </script>
+    </body>
+
+</html>
