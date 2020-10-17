@@ -26,7 +26,7 @@
                 let result = await JSON.parse(page);
                 let translatedText = result[0][0][0];
                 document.getElementById('w').innerText = word + " : " + translatedText;
-                let responce2 = await fetch(`http://api.giphy.com/v1/gifs/search?api_key=A1jbdqyBGeACC8oLAN2ppQz2cKU2BgRJ&q=${word}&limit=1`);
+                let responce2 = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=A1jbdqyBGeACC8oLAN2ppQz2cKU2BgRJ&q=${word}&limit=1`);
                 let gifObj = await responce2.json();
                 if (gifObj.data[0]) {
                     let gif = gifObj.data[0].id;
